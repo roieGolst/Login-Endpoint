@@ -1,0 +1,17 @@
+{
+  "name": "Login-Endpoint",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "startDev": "bun src/index.ts"
+  },
+  "dependencies": {
+    "mysql2": "^3.9.7",
+    "sequelize": "^6.37.3",
+    "sqlite3": "^5.1.7"
+  },
+  "packageManager": "yarn@4.2.0",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
