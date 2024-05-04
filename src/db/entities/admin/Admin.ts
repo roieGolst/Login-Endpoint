@@ -2,7 +2,7 @@ import { Sequelize, UniqueConstraintError } from "sequelize";
 import AdminModel from "./model/AdminModel";
 import { IAdminEntity, AdminAttributes } from "./IAdminEntity";
 
-export default class AdminSequelizeEntity implements IAdminEntity{
+export default class AdminEntity implements IAdminEntity{
 
     private readonly driver: Sequelize;
     constructor(driver: Sequelize) {

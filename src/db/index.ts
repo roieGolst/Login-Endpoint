@@ -1,7 +1,10 @@
 import { IDatabase } from "./common/IDatabase";
 import { Sequelize } from "sequelize";
-import UserSequelizeEntity from "./entities/user/User";
-import AdminSequelizeEntity from "./entities/admin/Admin";
+import UserEntity from "./entities/user/User";
+import AdminEntity from "./entities/admin/Admin";
+import * as configs from "../configs/index";
+
+const dbConfigs = configs.db;
 
 export default class DBInstance {
 
@@ -9,18 +12,18 @@ export default class DBInstance {
 
     public static async init(force: boolean = false) {
             const driver = new Sequelize(
-                "LoginEndpoint",
-                "root",
-                "" //TODO: Replace with secret
+                dbConfigs.database,
+                dbConfigs.auth.username,
+                dbConfigs.auth.password
                 ,{
-                host: "localhost",
-                port: 3306,
+                host: dbConfigs.server.host,
+                port: dbConfigs.server.port,
                 dialect: "mysql"
             });
 
             DBInstance.instance = {
-                users: new UserSequelizeEntity(driver),
-                admins: new AdminSequelizeEntity(driver)
+                users: new UserEntity(driver),
+                admins: new AdminEntity(driver)
             };
 
             await driver.authenticate();

@@ -1,4 +1,5 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional, Sequelize } from "sequelize";
+import * as configs from "../../../../configs/index";
 
 export default class UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
     readonly declare id: CreationOptional<string>;
@@ -28,13 +29,13 @@ export default class UserModel extends Model<InferAttributes<UserModel>, InferCr
                 },
 
                 username: {
-                    type: DataTypes.STRING(16),
+                    type: DataTypes.STRING(configs.user.USERNAME_MAX_LENGTH),
                     primaryKey: true,
                     allowNull: false,
                 },
 
                 password: {
-                    type: DataTypes.STRING(32),
+                    type: DataTypes.STRING(configs.user.PASSWORD_MAX_LENGTH),
                     allowNull: false
                 }
             },
