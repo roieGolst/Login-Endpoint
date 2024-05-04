@@ -1,4 +1,5 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional, Sequelize } from "sequelize";
+import * as configs from "../../../../configs/index";
 
 export default class AdminModel extends Model<InferAttributes<AdminModel>, InferCreationAttributes<AdminModel>> {
     readonly declare id: CreationOptional<string>;
@@ -16,13 +17,13 @@ export default class AdminModel extends Model<InferAttributes<AdminModel>, Infer
                 },
 
                 username: {
-                    type: DataTypes.STRING(16),
+                    type: DataTypes.STRING(configs.admin.USERNAME_MAX_LENGTH),
                     primaryKey: true,
                     allowNull: false,
                 },
 
                 password: {
-                    type: DataTypes.STRING(32)
+                    type: DataTypes.STRING(configs.admin.PASSWORD_MAX_LENGTH)
                 }
             },
 

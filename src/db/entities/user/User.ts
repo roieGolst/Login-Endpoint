@@ -2,7 +2,7 @@ import { Sequelize, UniqueConstraintError } from "sequelize";
 import UserModel from "./model/UserModel";
 import { IUserEntity, UserAttributes } from "./IUserEntity";
 
-export default class UserSequelizeEntity implements IUserEntity{
+export default class UserEntity implements IUserEntity{
 
     private readonly driver: Sequelize;
     constructor(driver: Sequelize) {
