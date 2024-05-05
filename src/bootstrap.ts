@@ -5,11 +5,11 @@ export type BootstrapArgs = {
 }
 
 export async function bootstrap(args: BootstrapArgs): Promise<void> {
-     await args.dbInitializer();
+     await args.dbInitializer(true);
 
      const db = await DependenciesInjection.getDbInstance();
 
-     await db.users.insert({
-         hashPassword: "123123", username: "Roie", email: "roiegols@fma.com"
-     })
+     // await db.users.insert({
+     //     hashPassword: "123123", username: "Roie", email: "roiegols@fma.com", adminUser: true
+     // })
 }
