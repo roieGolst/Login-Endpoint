@@ -10,6 +10,6 @@ export async function bootstrap(args: BootstrapArgs): Promise<void> {
      const db = await DependenciesInjection.getDbInstance();
 
      // await db.users.insert({
-     //     hashPassword: "123123", username: "Roie", email: "roiegols@fma.com", adminUser: true
+     //     password: "123123", username: "Roie", email: "roiegols@fma.com", adminUser: true
      // })
 }
