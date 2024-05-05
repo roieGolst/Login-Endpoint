@@ -4,10 +4,12 @@ export type UserAttributes = {
     readonly email: string;
     readonly username: string;
     readonly hashPassword: string;
+    readonly adminUser?: boolean;
 }
 
 export interface IUserEntity {
     insert(user: UserAttributes): Promise<boolean>;
-    getUserByUsername(username: string): Promise<UserModel | void>;
-    getUserById(id: string): Promise<UserModel | void>;
+    getUserByUsername(username: string): Promise<UserModel | null>;
+    getUserById(id: string): Promise<UserModel | null>;
+    getUserByEmail(email: string): Promise<UserModel | null>;
 }

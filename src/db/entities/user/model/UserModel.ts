@@ -6,8 +6,9 @@ export default class UserModel extends Model<InferAttributes<UserModel>, InferCr
     readonly declare email: string;
     readonly declare username: string;
     readonly declare password: string;
+    readonly declare adminUser: CreationOptional<boolean>;
 
-    static initUser(driver: Sequelize): void {
+    static initModel(driver: Sequelize): void {
         UserModel.init(
             {
                 id:{
@@ -36,6 +37,12 @@ export default class UserModel extends Model<InferAttributes<UserModel>, InferCr
 
                 password: {
                     type: DataTypes.STRING(configs.user.PASSWORD_MAX_LENGTH),
+                    allowNull: false
+                },
+
+                adminUser: {
+                    type: DataTypes.BOOLEAN,
+                    defaultValue: false,
                     allowNull: false
                 }
             },
