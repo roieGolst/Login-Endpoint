@@ -1,5 +1,4 @@
 import { DependenciesInjection } from "./di";
-import { LoginUseCase } from "./useCases/login/login";
 
 export type BootstrapArgs = {
     dbInitializer: (force?: boolean) => Promise<void>;
