@@ -7,6 +7,6 @@ export type AdminAttributes = {
 
 export interface IAdminEntity {
     insert(user: AdminAttributes): Promise<boolean>;
-    getUserByUsername(username: string): Promise<AdminModel | void>;
-    getUserById(id: string): Promise<AdminModel | void>;
+    getAdminByUsername(username: string): Promise<AdminModel | null>;
+    getAdminById(id: string): Promise<AdminModel | null>;
 }

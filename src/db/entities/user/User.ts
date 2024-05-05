@@ -2,7 +2,7 @@ import { Sequelize, UniqueConstraintError } from "sequelize";
 import UserModel from "./model/UserModel";
 import { IUserEntity, UserAttributes } from "./IUserEntity";
 
-export default class UserEntity implements IUserEntity{
+export default class UserEntity implements IUserEntity {
 
     private readonly driver: Sequelize;
     constructor(driver: Sequelize) {
@@ -31,53 +31,37 @@ export default class UserEntity implements IUserEntity{
         }
     }
 
-    async getUserByUsername(username: string): Promise<UserModel | void> {
-        // try {
-        //     const user = await User.findByPk(username);
-        //
-        //     if(!user) {
-        //         return {
-        //             isSuccess: false,
-        //             error: "User not defind"
-        //         };
-        //     }
-        //
-        //     return {
-        //         isSuccess: true,
-        //         value: user
-        //     };
-        // }
-        // catch(err: unknown) {
-        //     return {
-        //         isSuccess: false,
-        //         error: `${err}`
-        //     };
-        // }
+    async getUserByUsername(username: string): Promise<UserModel | null> {
+        try {
+            return UserModel.findOne({
+                where: {
+                    username
+                }
+            })
+        } catch (err) {
+            //TODO: Replace with error handling
+            return null;
+        }
+    }
+    async getUserByEmail(email: string): Promise<UserModel | null> {
+        try {
+            return UserModel.findOne({
+                where: {
+                    email
+                }
+            })
+        } catch (err) {
+            //TODO: Replace with error handling
+            return null;
+        }
     }
 
-    async getUserById(id: string): Promise<UserModel | void> {
-        // try {
-        //     const user = await User.findOne({
-        //         where: {id: id}
-        //     });
-        //
-        //     if(!user) {
-        //         return {
-        //             isSuccess: false,
-        //             error: "User not defind"
-        //         };
-        //     }
-        //
-        //     return {
-        //         isSuccess: true,
-        //         value: user
-        //     };
-        // }
-        // catch(err: unknown) {
-        //     return {
-        //         isSuccess: false,
-        //         error: `${err}`
-        //     };
-        // }
+    async getUserById(id: string): Promise<UserModel | null> {
+        try {
+            return UserModel.findByPk(id);
+        } catch (err) {
+            //TODO: Replace with error handling
+            return null;
+        }
     }
 }

@@ -30,53 +30,25 @@ export default class AdminEntity implements IAdminEntity{
         }
     }
 
-    async getUserByUsername(username: string): Promise<AdminModel | void> {
-        // try {
-        //     const user = await User.findByPk(username);
-        //
-        //     if(!user) {
-        //         return {
-        //             isSuccess: false,
-        //             error: "User not defind"
-        //         };
-        //     }
-        //
-        //     return {
-        //         isSuccess: true,
-        //         value: user
-        //     };
-        // }
-        // catch(err: unknown) {
-        //     return {
-        //         isSuccess: false,
-        //         error: `${err}`
-        //     };
-        // }
+    async getAdminByUsername(username: string): Promise<AdminModel | null> {
+        try {
+            return await AdminModel.findOne({
+                where: {
+                    username
+                }
+            });
+        } catch (err) {
+            //TODO: Replace with error handling
+            return null
+        }
     }
 
-    async getUserById(id: string): Promise<AdminModel | void> {
-        // try {
-        //     const user = await User.findOne({
-        //         where: {id: id}
-        //     });
-        //
-        //     if(!user) {
-        //         return {
-        //             isSuccess: false,
-        //             error: "User not defind"
-        //         };
-        //     }
-        //
-        //     return {
-        //         isSuccess: true,
-        //         value: user
-        //     };
-        // }
-        // catch(err: unknown) {
-        //     return {
-        //         isSuccess: false,
-        //         error: `${err}`
-        //     };
-        // }
+    async getAdminById(id: string): Promise<AdminModel | null> {
+        try {
+            return await AdminModel.findByPk(id);
+        } catch (err) {
+            //TODO: Replace with error handling
+            return null
+        }
     }
 }
