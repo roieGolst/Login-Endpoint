@@ -31,7 +31,11 @@ export class DependenciesInjection {
             await DependenciesInjection.getDbInstance();
 
             DependenciesInjection.userRepository = UserRepository.getInstance();
-            DependenciesInjection.userRepository.init(DependenciesInjection.dbInstance.users);
+
+            DependenciesInjection.userRepository.init(
+                DependenciesInjection.dbInstance.users,
+                DependenciesInjection.dbInstance.tokens,
+                );
         }
 
         return DependenciesInjection.userRepository;

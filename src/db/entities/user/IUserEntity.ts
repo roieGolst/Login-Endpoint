@@ -3,7 +3,7 @@ import UserModel from "./model/UserModel";
 export type UserAttributes = {
     readonly email: string;
     readonly username: string;
-    readonly hashPassword: string;
+    readonly password: string;
     readonly adminUser?: boolean;
 }
 

@@ -17,7 +17,7 @@ export default class UserEntity implements IUserEntity {
                 {
                     email: item.email,
                     username: item.username,
-                    password: item.hashPassword,
+                    password: item.password,
                     adminUser: item.adminUser
                 }
             )

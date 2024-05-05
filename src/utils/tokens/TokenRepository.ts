@@ -98,13 +98,13 @@ export class TokenRepository {
         return !isExpired;
     }
 
-    public authToken(token: string): UserSign | Error {
+    public authToken(token: string): UserSign | undefined {
         this.safaRun();
 
         try {
             return jwt.verify(token, secret) as UserSign
         } catch (err) {
-            return new Error();
+            return undefined;
         }
     }
 
