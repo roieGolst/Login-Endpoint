@@ -2,8 +2,9 @@ import jwt from "jsonwebtoken";
 import { RefreshToken, Tokens, UserSign } from "./common/types";
 import { ITokenEntity } from "../../db/entities/tokens/ITokenEntity";
 import TokenModel from "../../db/entities/tokens/model/TokenModel";
+import { loginUseCase } from "../../configs";
 
-const secret = "secr3t";
+const secret = "secr3t"; //TODO: Replace with inject secret
 
 export class TokenRepository {
     private static INSTANCE: TokenRepository;
@@ -54,15 +55,15 @@ export class TokenRepository {
             userName: userSing.username,
             id: userSing.id
             },
-            secret, //TODO: inject secret
-            { expiresIn: "10m" }//TODO: Replace with configuration
+            secret,
+            { expiresIn: loginUseCase.TOKEN_MINUTES_VALIDITY }
         );
     }
 
     private generateRefreshToken(userSing: UserSign): RefreshToken {
         this.safaRun();
         const expr = new Date();
-        expr.setMonth(expr.getMonth() + 6); //TODO: Replace with configuration.
+        expr.setMonth(expr.getMonth() + loginUseCase.REFRESH_TOKEN_MONTH_VALIDITY);
 
         return {
              refreshToken: jwt.sign(
@@ -70,7 +71,7 @@ export class TokenRepository {
                      userName: userSing.username,
                      id: userSing.id
                  },
-                 secret, //TODO: Replace with inject secret
+                 secret,
              ),
             expr
         }
@@ -83,32 +84,27 @@ export class TokenRepository {
         return jwt.sign(userSign, secret);
     }
 
-    private async authRefreshToken(refreshToken: string): Promise<void> {
+    private async authRefreshToken(refreshToken: string): Promise<boolean> {
         this.safaRun();
 
         const token = await this.tokenDb.getRefreshTokenDetails(refreshToken);
 
         if(!token) {
-            //TODO: replace with error handling.
-            throw new Error();
+            return false;
         }
 
         const isExpired = this.expiredCheck(token);
 
-        if(isExpired) {
-            //TODO: replace with error handling.
-            throw new Error();
-        }
+        return !isExpired;
     }
 
-    public authToken(token: string): UserSign {
+    public authToken(token: string): UserSign | Error {
         this.safaRun();
 
         try {
             return jwt.verify(token, secret) as UserSign
         } catch (err) {
-            //TODO: Replace with error handling
-            throw new Error();
+            return new Error();
         }
     }
 
