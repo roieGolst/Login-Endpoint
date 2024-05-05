@@ -1,4 +1,4 @@
-import { IUserEntity, UserAttributes } from "../../db/entities/user/IUserEntity";
+import { IUserEntity } from "../../db/entities/user/IUserEntity";
 import UserModel from "../../db/entities/user/model/UserModel";
 import { ITokenEntity } from "../../db/entities/tokens/ITokenEntity";
 
@@ -45,7 +45,7 @@ export class UserRepository {
              const userByName = await this.userDb.getUserByUsername(identifier);
              const userByEmail = await this.userDb.getUserByEmail(identifier);
 
-            return userByEmail || userByEmail;
+            return userByName || userByEmail;
         } catch (err: unknown) {
             //TODO: Replace with error handling.
             return null;
@@ -61,8 +61,7 @@ export class UserRepository {
             const user = await this.userDb.getUserById(userId);
 
             if(!user) {
-                //TODO: Replace with error handling
-                throw new Error();
+                return false;
             }
 
             return user.adminUser;

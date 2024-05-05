@@ -117,10 +117,6 @@ export class TokenRepository {
         const exprTime = new Date(token.expirationDate);
 
 
-        if(nowTime.toISOString() > exprTime.toISOString()){
-            return false;
-        }
-
-        return true;
+        return nowTime.toISOString() <= exprTime.toISOString();
     }
 }

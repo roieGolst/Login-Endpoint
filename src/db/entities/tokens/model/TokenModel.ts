@@ -1,4 +1,4 @@
-import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional, Sequelize } from "sequelize";
+import { Model, DataTypes, InferAttributes, InferCreationAttributes, Sequelize } from "sequelize";
 import * as configs from "../../../../configs/index";
 
 export default class TokenModel extends Model<InferAttributes<TokenModel>, InferCreationAttributes<TokenModel>> {
