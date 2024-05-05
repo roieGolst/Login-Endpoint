@@ -8,7 +8,7 @@ export default class UserEntity implements IUserEntity{
     constructor(driver: Sequelize) {
         this.driver = driver;
 
-        UserModel.initUser(this.driver);
+        UserModel.initModel(this.driver);
     }
 
     async insert(item: UserAttributes): Promise<boolean> {

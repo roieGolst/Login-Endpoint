@@ -7,7 +7,7 @@ export default class UserModel extends Model<InferAttributes<UserModel>, InferCr
     readonly declare username: string;
     readonly declare password: string;
 
-    static initUser(driver: Sequelize): void {
+    static initModel(driver: Sequelize): void {
         UserModel.init(
             {
                 id:{

@@ -6,7 +6,7 @@ export default class AdminModel extends Model<InferAttributes<AdminModel>, Infer
     readonly declare username: string;
     readonly declare password: string;
 
-    static initAdmin(driver: Sequelize): void {
+    static initModel(driver: Sequelize): void {
         AdminModel.init(
             {
                 id:{

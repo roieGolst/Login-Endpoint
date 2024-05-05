@@ -8,7 +8,7 @@ export default class AdminEntity implements IAdminEntity{
     constructor(driver: Sequelize) {
         this.driver = driver;
 
-        AdminModel.initAdmin(this.driver);
+        AdminModel.initModel(this.driver);
     }
 
     async insert(item: AdminAttributes): Promise<boolean> {
