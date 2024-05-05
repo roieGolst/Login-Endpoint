@@ -53,8 +53,7 @@ export default class TokenEntity implements ITokenEntity {
                 }
             });
         } catch (err) {
-            //TODO: Replace with error handling.
-            throw new Error()
+            return [];
         }
     }
 

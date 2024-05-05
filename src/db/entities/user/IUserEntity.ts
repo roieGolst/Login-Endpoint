@@ -4,6 +4,7 @@ export type UserAttributes = {
     readonly email: string;
     readonly username: string;
     readonly hashPassword: string;
+    readonly adminUser?: boolean;
 }
 
 export interface IUserEntity {

@@ -17,7 +17,8 @@ export default class UserEntity implements IUserEntity {
                 {
                     email: item.email,
                     username: item.username,
-                    password: item.hashPassword
+                    password: item.hashPassword,
+                    adminUser: item.adminUser
                 }
             )
 
@@ -39,7 +40,6 @@ export default class UserEntity implements IUserEntity {
                 }
             })
         } catch (err) {
-            //TODO: Replace with error handling
             return null;
         }
     }
@@ -51,7 +51,6 @@ export default class UserEntity implements IUserEntity {
                 }
             })
         } catch (err) {
-            //TODO: Replace with error handling
             return null;
         }
     }
@@ -60,7 +59,6 @@ export default class UserEntity implements IUserEntity {
         try {
             return UserModel.findByPk(id);
         } catch (err) {
-            //TODO: Replace with error handling
             return null;
         }
     }

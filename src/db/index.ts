@@ -1,7 +1,6 @@
 import { IDatabase } from "./common/IDatabase";
 import { Sequelize } from "sequelize";
 import UserEntity from "./entities/user/User";
-import AdminEntity from "./entities/admin/Admin";
 import TokenEntity from "./entities/tokens/Token";
 import * as configs from "../configs/index";
 
@@ -24,7 +23,6 @@ export default class DBInstance {
 
             DBInstance.instance = {
                 users: new UserEntity(driver),
-                admins: new AdminEntity(driver),
                 tokens: new TokenEntity(driver)
             };
 
