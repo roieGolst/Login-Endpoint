@@ -8,7 +8,7 @@ export type BootstrapArgs = {
 export async function bootstrap(args: BootstrapArgs): Promise<void> {
      await args.dbInitializer();
 
-     const db = await DependenciesInjection.getDbInstance();
+     await DependenciesInjection.getDbInstance();
      const networkLayer = await DependenciesInjection.getNetworkLayerInstance();
 
      networkLayer.listen(() => {
