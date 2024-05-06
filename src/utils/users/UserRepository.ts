@@ -1,7 +1,6 @@
 import { IUserEntity, UserAttributes } from "../../db/entities/user/IUserEntity";
 import UserModel from "../../db/entities/user/model/UserModel";
 import { ITokenEntity } from "../../db/entities/tokens/ITokenEntity";
-import { DependenciesInjection } from "../../di";
 import bcrypt from "bcrypt";
 import { loginUseCase } from "../../configs";
 
@@ -32,6 +31,14 @@ export class UserRepository {
         }
     }
 
+    public async getUser(identifier: string): Promise<UserModel | null> {
+        return this.findByIdentifier(identifier);
+    }
+
+    public async getAllUsers(): Promise<UserModel[] | []> {
+        return this.userDb.getAllUsers();
+    }
+
     public async register(requiredUser: UserAttributes): Promise<boolean> {
        try {
            if(await this.isRegistered(requiredUser.email) || await this.isRegistered(requiredUser.username)) {
@@ -48,16 +55,7 @@ export class UserRepository {
        }
     }
 
-    public async registerAdminUser(adminUser: UserAttributes, fromAccessToken: string): Promise<boolean> {
-        const tokenRepo = await DependenciesInjection.getTokenRepositoryInstance();
-
-        const usrSing = tokenRepo.authToken(fromAccessToken);
-        if(!usrSing) return false;
-
-        if(!await this.isAdmin(usrSing.id)) {
-            return false;
-        }
-
+    public async registerAdminUser(adminUser: UserAttributes): Promise<boolean> {
         return  await this.userDb.insert({
             username: adminUser.username,
             email: adminUser.email,
@@ -71,7 +69,7 @@ export class UserRepository {
 
         const user = await this.findByIdentifier(identifier);
 
-        if (!(user && this.isNotLoggedIn(user.id))) {
+        if (!(user && await this.isNotLoggedIn(user.id))) {
             throw new Error()//TODO: Replace with error handling
         }
 
@@ -82,8 +80,9 @@ export class UserRepository {
         try {
             const userByName = await this.userDb.getUserByUsername(identifier);
             const userByEmail = await this.userDb.getUserByEmail(identifier);
+            const userById = await this.userDb.getUserById(identifier);
 
-            return userByName || userByEmail
+            return userByName || userByEmail || userById;
         } catch (err: unknown) {
             return null;
         }
@@ -100,8 +99,8 @@ export class UserRepository {
         }
     }
 
-    private isNotLoggedIn(userId: string): boolean {
-        return !this.tokenDb.hasActiveToken(userId);
+    private async isNotLoggedIn(userId: string): Promise<boolean> {
+        return !await this.tokenDb.hasActiveToken(userId);
     }
 
     public async isAdmin(userId: string): Promise<boolean> {
@@ -113,6 +112,46 @@ export class UserRepository {
             }
 
             return user.adminUser;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    public async updateEmail(username: string, requiredEmail: string): Promise<boolean> {
+        try {
+            const user = await this.userDb.getUserByUsername(username);
+
+            if(!user) {
+                return false;
+            }
+
+            return await this.userDb.updateUserEmail(user, requiredEmail);
+        } catch (err) {
+            return false;
+        }
+    }
+    public async updatePassword(identifier: string, requiredPassword: string): Promise<boolean> {
+        try {
+            const user = await this.findByIdentifier(identifier);
+
+            if(!user) {
+                return false;
+            }
+
+            return await this.userDb.updateUserPassword(user, this.hashPassword(requiredPassword));
+        } catch (err) {
+            return false;
+        }
+    }
+    public async deleteUser(userId: string): Promise<boolean> {
+        try {
+            const user = await this.userDb.getUserById(userId);
+
+            if(!user) {
+                return false;
+            }
+
+            return await this.userDb.deleteUser(user);
         } catch (err) {
             return false;
         }

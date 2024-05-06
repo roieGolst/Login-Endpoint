@@ -3,10 +3,10 @@ import * as configs from "../../../../configs/index";
 
 export default class UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
     readonly declare id: CreationOptional<string>;
-    readonly declare email: string;
     readonly declare username: string;
-    readonly declare password: string;
-    readonly declare adminUser: CreationOptional<boolean>;
+    declare email: string;
+    declare password: string;
+    declare adminUser: CreationOptional<boolean>;
 
     static initModel(driver: Sequelize): void {
         UserModel.init(

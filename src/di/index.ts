@@ -20,6 +20,7 @@ export class DependenciesInjection {
     static async getNetworkLayerInstance(): Promise<NetworkLayer> {
         if(!DependenciesInjection.networkLayerInstance) {
             DependenciesInjection.networkLayerInstance = NetworkLayer.getInstance();
+            await DependenciesInjection.networkLayerInstance.init();
         }
 
         return  DependenciesInjection.networkLayerInstance;
