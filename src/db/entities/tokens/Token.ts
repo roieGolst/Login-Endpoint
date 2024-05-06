@@ -68,13 +68,12 @@ export default class TokenEntity implements ITokenEntity {
             return null;
         }
     }
-     public async activateToken(token: TokenAttributes): Promise<boolean> {
+     public async activateToken(token: string, userId: string): Promise<boolean> {
         try {
             await ActiveTokenModel.create(
                 {
-                    userId: token.userId,
-                    token: token.token,
-                    expirationDate: token.expirationDate.toString()
+                    userId,
+                    token,
                 }
             )
             return true;

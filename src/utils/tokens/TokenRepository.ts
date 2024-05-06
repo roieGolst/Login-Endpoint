@@ -42,10 +42,12 @@ export class TokenRepository {
             token: refreshToken.refreshToken,
             expirationDate: refreshToken.expr
         });
+
+         await this.tokenDb.activateToken(token, sign.id);
         return {
             token,
             refreshToken: refreshToken.refreshToken
-        }
+        };
     }
 
     private generateToken(userSing: UserSign): string {
@@ -79,9 +81,16 @@ export class TokenRepository {
 
     public async getNewToken(userSign: UserSign, refreshToken: string): Promise<string> {
         this.safaRun();
-
         await this.authRefreshToken(refreshToken);
-        return jwt.sign(userSign, secret);
+
+        //Deactivate the previous token first
+        await this.tokenDb.deactivateToken(userSign.id);
+
+        //Generating a new access token and assigning as active
+        const token = this.generateToken(userSign);
+        await this.tokenDb.activateToken(token, userSign.id)
+
+        return token;
     }
 
     private async authRefreshToken(refreshToken: string): Promise<boolean> {

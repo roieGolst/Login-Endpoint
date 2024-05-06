@@ -11,7 +11,7 @@ export default class UserEntity implements IUserEntity {
         UserModel.initModel(this.driver);
     }
 
-    async insert(item: UserAttributes): Promise<boolean> {
+    public async insert(item: UserAttributes): Promise<boolean> {
         try {
             await UserModel.create(
                 {
@@ -32,7 +32,7 @@ export default class UserEntity implements IUserEntity {
         }
     }
 
-    async getUserByUsername(username: string): Promise<UserModel | null> {
+    public async getUserByUsername(username: string): Promise<UserModel | null> {
         try {
             return UserModel.findOne({
                 where: {
@@ -43,7 +43,16 @@ export default class UserEntity implements IUserEntity {
             return null;
         }
     }
-    async getUserByEmail(email: string): Promise<UserModel | null> {
+
+    public async getAllUsers(): Promise<UserModel[] | []> {
+        try {
+            return UserModel.findAll();
+        } catch (err) {
+            return [];
+        }
+    }
+
+    public async getUserByEmail(email: string): Promise<UserModel | null> {
         try {
             return UserModel.findOne({
                 where: {
@@ -55,11 +64,35 @@ export default class UserEntity implements IUserEntity {
         }
     }
 
-    async getUserById(id: string): Promise<UserModel | null> {
+    public async getUserById(id: string): Promise<UserModel | null> {
         try {
-            return UserModel.findByPk(id);
+            return await UserModel.findByPk(id);
         } catch (err) {
             return null;
+        }
+    }
+    public async updateUserEmail(user: UserModel, updatedEmail: string): Promise<boolean> {
+        try {
+            await user.update("email", updatedEmail);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+    public async updateUserPassword(user: UserModel, updatedPassword: string): Promise<boolean> {
+        try {
+            await user.update("password", updatedPassword);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+    public async deleteUser(user: UserModel): Promise<boolean> {
+        try {
+            await user.destroy();
+            return true;
+        } catch (err) {
+            return false;
         }
     }
 }

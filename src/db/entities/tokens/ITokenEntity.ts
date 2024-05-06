@@ -10,7 +10,7 @@ export interface ITokenEntity {
     insertRefreshToken(token: TokenAttributes): Promise<boolean>;
     getRefreshTokenListByUserId(id: string): Promise<TokenModel[]>;
     getRefreshTokenDetails(token: string): Promise<TokenModel | null>;
-    activateToken(token: TokenAttributes): Promise<boolean>;
+    activateToken(token: string, userId: string): Promise<boolean>;
     deactivateToken(userId: string): Promise<boolean>;
     hasActiveToken(id: string): Promise<boolean>;
 }

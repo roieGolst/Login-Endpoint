@@ -4,7 +4,6 @@ import * as configs from "../../../../configs/index";
 export default class ActiveTokenModel extends Model<InferAttributes<ActiveTokenModel>, InferCreationAttributes<ActiveTokenModel>> {
     readonly declare userId: string;
     readonly declare token: string;
-    readonly declare expirationDate: string;
 
     static initModel(driver: Sequelize): void {
         ActiveTokenModel.init(
@@ -16,19 +15,8 @@ export default class ActiveTokenModel extends Model<InferAttributes<ActiveTokenM
                 },
 
                 token: {
-                    type: DataTypes.STRING(configs.admin.PASSWORD_MAX_LENGTH),
+                    type: DataTypes.STRING,
                     allowNull: false
-                },
-
-                expirationDate: {
-                    type: DataTypes.DATE,
-                    allowNull: false,
-                    validate: {
-                        isDate: {
-                            msg: "Must be type of 'Date'",
-                            args: true
-                        }
-                    }
                 }
             },
 

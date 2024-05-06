@@ -16,7 +16,7 @@ export default class TokenModel extends Model<InferAttributes<TokenModel>, Infer
                 },
 
                 token: {
-                    type: DataTypes.STRING(configs.admin.PASSWORD_MAX_LENGTH),
+                    type: DataTypes.STRING,
                     allowNull: false
                 },
 
