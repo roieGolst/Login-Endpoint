@@ -1,12 +1,12 @@
 {
   "server": {
-    "host": "localhost",
+    "host": "mysql",
     "port": 3306
   },
 
   "auth": {
     "username": "root",
-    "password": ""
+    "password": "secr3t"
   },
 
   "database": "LoginEndpoint"
