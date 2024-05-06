@@ -66,7 +66,11 @@ export default class UserEntity implements IUserEntity {
 
     public async getUserById(id: string): Promise<UserModel | null> {
         try {
-            return await UserModel.findByPk(id);
+            return await UserModel.findOne({
+                where: {
+                    id
+                }
+            });
         } catch (err) {
             return null;
         }

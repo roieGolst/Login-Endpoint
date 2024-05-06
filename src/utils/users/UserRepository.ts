@@ -1,7 +1,6 @@
 import { IUserEntity, UserAttributes } from "../../db/entities/user/IUserEntity";
 import UserModel from "../../db/entities/user/model/UserModel";
 import { ITokenEntity } from "../../db/entities/tokens/ITokenEntity";
-import { DependenciesInjection } from "../../di";
 import bcrypt from "bcrypt";
 import { loginUseCase } from "../../configs";
 
@@ -81,8 +80,9 @@ export class UserRepository {
         try {
             const userByName = await this.userDb.getUserByUsername(identifier);
             const userByEmail = await this.userDb.getUserByEmail(identifier);
+            const userById = await this.userDb.getUserById(identifier);
 
-            return userByName || userByEmail
+            return userByName || userByEmail || userById;
         } catch (err: unknown) {
             return null;
         }

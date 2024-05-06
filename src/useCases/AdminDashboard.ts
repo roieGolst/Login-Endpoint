@@ -13,7 +13,7 @@ export class AdminDashboardUseCases {
 
     public static async getUserById(req: Request, res: Response): Promise<void> {
         const usrRepo = await DependenciesInjection.getUserRepositoryInstance();
-        const identifier = req.params.id;
+        const identifier = req.params.username;
 
          res.status(200).send(await usrRepo.getUser(identifier));
     }
