@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "secr3t" #Repalce with secr3t
+      MYSQL_DATABASE: LoginEndpoint
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  login-endpoint:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: login-endpoint
+    image: login-image
+    command: yarn start
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

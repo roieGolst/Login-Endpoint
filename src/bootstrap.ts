@@ -8,14 +8,10 @@ export type BootstrapArgs = {
 export async function bootstrap(args: BootstrapArgs): Promise<void> {
      await args.dbInitializer();
 
-     const db = await DependenciesInjection.getDbInstance();
+     await DependenciesInjection.getDbInstance();
      const networkLayer = await DependenciesInjection.getNetworkLayerInstance();
 
      networkLayer.listen(() => {
          console.log(`Sever bounded at port: ${network.port}`);
-     })
-
-     // await db.users.insert({
-     //     password: "123123", username: "Roie", email: "roiegols@fma.com", adminUser: true
-     // })
+     });
 }
