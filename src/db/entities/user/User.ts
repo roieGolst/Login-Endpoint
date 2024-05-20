@@ -1,6 +1,6 @@
 import { Sequelize, UniqueConstraintError } from "sequelize";
 import UserModel from "./model/UserModel";
-import { IUserEntity, UserAttributes } from "./IUserEntity";
+import { IUserEntity, NewUserPayload } from "./IUserEntity";
 
 export default class UserEntity implements IUserEntity {
 
@@ -11,7 +11,7 @@ export default class UserEntity implements IUserEntity {
         UserModel.initModel(this.driver);
     }
 
-    public async insert(item: UserAttributes): Promise<boolean> {
+    public async insert(item: NewUserPayload): Promise<boolean> {
         try {
             await UserModel.create(
                 {

@@ -1,18 +1,22 @@
 import UserModel from "./model/UserModel";
 
-export type UserAttributes = {
+export type NewUserPayload = {
     readonly email: string;
     readonly username: string;
     readonly password: string;
-    readonly adminUser?: boolean;
+    readonly adminUser: boolean;
 }
 
+export type NullableUser = UserModel | null;
+
 export interface IUserEntity {
-    insert(user: UserAttributes): Promise<boolean>;
-    getUserByUsername(username: string): Promise<UserModel | null>;
-    getAllUsers(): Promise<UserModel[] | []>;
-    getUserById(id: string): Promise<UserModel | null>;
-    getUserByEmail(email: string): Promise<UserModel | null>;
+    insert(user: NewUserPayload): Promise<boolean>;
+
+    getUserByUsername(username: string): Promise<NullableUser>;
+    getUserById(id: string): Promise<NullableUser>;
+    getUserByEmail(email: string): Promise<NullableUser>;
+    getAllUsers(): Promise<UserModel[]>;
+
     updateUserEmail(user: UserModel, updatedEmail: string): Promise<boolean>;
     updateUserPassword(user: UserModel, updatedPassword: string): Promise<boolean>;
     deleteUser(user: UserModel): Promise<boolean>;

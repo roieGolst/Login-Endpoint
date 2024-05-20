@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { DependenciesInjection } from "../../di";
 
+const tokenRepo = DependenciesInjection.provideTokenRepository();
+const userRepo = DependenciesInjection.provideUserRepository();
+
 export async function authAdminUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     const token = req.header("access-token");
-    const tokenRepo = await DependenciesInjection.getTokenRepositoryInstance();
 
     if(!token) {
         res.redirect(400, "/users/login");
@@ -17,9 +19,14 @@ export async function authAdminUser(req: Request, res: Response, next: NextFunct
         return;
     }
 
-    const userRepository = await DependenciesInjection.getUserRepositoryInstance();
+    const queriedUser = await userRepo.getUserById(userSign.id);
 
-    if(! await userRepository.isAdmin(userSign.id)) {
+    if(!queriedUser) {
+        res.sendStatus(401);
+        return;
+    }
+
+    if(! await userRepo.isAdmin(queriedUser)) {
         res.redirect(401, "login");
         return;
     }

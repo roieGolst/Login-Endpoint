@@ -1,5 +1,4 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, Sequelize } from "sequelize";
-import * as configs from "../../../../configs/index";
 
 export default class ActiveTokenModel extends Model<InferAttributes<ActiveTokenModel>, InferCreationAttributes<ActiveTokenModel>> {
     readonly declare userId: string;

@@ -1,7 +1,7 @@
 import { bootstrap } from "./bootstrap";
-import DBInstance from "./db";
+import DbHelper from "./db";
 
-bootstrap({dbInitializer: DBInstance.init})
+bootstrap({dbInitializer: DbHelper.init})
     .then(() => {
         console.log("yesss");
     });

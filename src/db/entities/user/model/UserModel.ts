@@ -12,9 +12,9 @@ export default class UserModel extends Model<InferAttributes<UserModel>, InferCr
         UserModel.init(
             {
                 id:{
+                    primaryKey: true,
                     type: DataTypes.UUID,
                     defaultValue: DataTypes.UUIDV4,
-                    unique: true,
                     allowNull: false
                 },
 
@@ -31,8 +31,8 @@ export default class UserModel extends Model<InferAttributes<UserModel>, InferCr
 
                 username: {
                     type: DataTypes.STRING(configs.user.USERNAME_MAX_LENGTH),
-                    primaryKey: true,
                     allowNull: false,
+                    unique: true
                 },
 
                 password: {
@@ -50,7 +50,13 @@ export default class UserModel extends Model<InferAttributes<UserModel>, InferCr
             {
                 sequelize: driver,
                 tableName: "Users",
-                timestamps: false
+                timestamps: false,
+                indexes: [
+                    {
+                        unique: true,
+                        fields: ['email', "username"],
+                    }
+                ]
             }
         )
     }

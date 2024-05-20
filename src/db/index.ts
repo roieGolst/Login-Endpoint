@@ -6,35 +6,24 @@ import * as configs from "../configs/index";
 
 const dbConfigs = configs.db;
 
-export default class DBInstance {
 
-    private static instance: IDatabase;
+export default class DbHelper {
+    public static async init(force: boolean = false): Promise<IDatabase> {
+        const driver = new Sequelize(
+            dbConfigs.database,
+            dbConfigs.auth.username,
+            dbConfigs.auth.password
+            ,{
+            host: "localhost",
+            port: dbConfigs.server.port,
+            dialect: "mysql"
+        });
 
-    public static async init(force: boolean = false) {
-            const driver = new Sequelize(
-                dbConfigs.database,
-                dbConfigs.auth.username,
-                dbConfigs.auth.password
-                ,{
-                host: dbConfigs.server.host,
-                port: dbConfigs.server.port,
-                dialect: "mysql"
-            });
+        await driver.sync({alter: force});
 
-            DBInstance.instance = {
-                users: new UserEntity(driver),
-                tokens: new TokenEntity(driver)
-            };
-
-            await driver.authenticate();
-            await driver.sync({force});
+        return {
+            users: new UserEntity(driver),
+            tokens: new TokenEntity(driver)
+        };
     }
-
-    public static getInstance(): IDatabase {
-        if(!DBInstance.instance) {
-            throw new Error("Can't access to 'Instance' before init function");
-        }
-        return DBInstance.instance;
-    }
-
 }

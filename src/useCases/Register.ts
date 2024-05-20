@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { DependenciesInjection } from "../di";
-import { UserAttributes } from "../db/entities/user/IUserEntity";
+import { NewUserPayload } from "../db/entities/user/IUserEntity";
 
 export class RegisterUseCase {
 
     public static async register(req: Request, res: Response): Promise<void> {
         try {
-            const usrRepo = await DependenciesInjection.getUserRepositoryInstance();
-            const body = req.body as UserAttributes;
+            const usrRepo = DependenciesInjection.provideUserRepository();
+            const body = req.body as NewUserPayload;
 
             const result = await usrRepo.register(body);
 

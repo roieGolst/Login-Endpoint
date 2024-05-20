@@ -1,7 +1,7 @@
 {
   "name": "Login-Endpoint",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf ./dist && tsc",
     "start": "node dist/index.js",
     "startDev": "bun src/index.ts"
   },

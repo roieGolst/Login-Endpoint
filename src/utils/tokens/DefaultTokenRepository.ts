@@ -3,37 +3,18 @@ import { RefreshToken, Tokens, UserSign } from "./common/types";
 import { ITokenEntity } from "../../db/entities/tokens/ITokenEntity";
 import TokenModel from "../../db/entities/tokens/model/TokenModel";
 import { loginUseCase } from "../../configs";
+import { ITokenRepository } from "./ITokenRepository";
 
 const secret = "secr3t"; //TODO: Replace with inject secret
 
-export class TokenRepository {
-    private static INSTANCE: TokenRepository;
+export class DefaultTokenRepository implements ITokenRepository{
     private tokenDb: ITokenEntity;
 
-    private constructor() {
-    }
-
-    public static getInstance(): TokenRepository {
-        if(!TokenRepository.INSTANCE) {
-            TokenRepository.INSTANCE = new TokenRepository();
-        }
-
-        return TokenRepository.INSTANCE;
-    }
-
-    public init(db: ITokenEntity) {
+    constructor(db: ITokenEntity) {
         this.tokenDb = db;
     }
 
-    private safaRun(): void {
-        if(!this.tokenDb) {
-            throw new Error("Must init the class before");
-        }
-    }
-
     public async generateTokens(sign: UserSign): Promise<Tokens> {
-        this.safaRun();
-
         const token = this.generateToken(sign);
         const refreshToken = this.generateRefreshToken(sign);
 
@@ -51,7 +32,6 @@ export class TokenRepository {
     }
 
     private generateToken(userSing: UserSign): string {
-        this.safaRun();
         return jwt.sign(
             {
             userName: userSing.username,
@@ -63,7 +43,6 @@ export class TokenRepository {
     }
 
     private generateRefreshToken(userSing: UserSign): RefreshToken {
-        this.safaRun();
         const expr = new Date();
         expr.setMonth(expr.getMonth() + loginUseCase.REFRESH_TOKEN_MONTH_VALIDITY);
 
@@ -80,7 +59,6 @@ export class TokenRepository {
     }
 
     public async getNewToken(userSign: UserSign, refreshToken: string): Promise<string> {
-        this.safaRun();
         await this.authRefreshToken(refreshToken);
 
         //Deactivate the previous token first
@@ -94,8 +72,6 @@ export class TokenRepository {
     }
 
     private async authRefreshToken(refreshToken: string): Promise<boolean> {
-        this.safaRun();
-
         const token = await this.tokenDb.getRefreshTokenDetails(refreshToken);
 
         if(!token) {
@@ -108,8 +84,6 @@ export class TokenRepository {
     }
 
     public authToken(token: string): UserSign | undefined {
-        this.safaRun();
-
         try {
             return jwt.verify(token, secret) as UserSign
         } catch (err) {
@@ -125,3 +99,4 @@ export class TokenRepository {
         return nowTime.toISOString() <= exprTime.toISOString();
     }
 }
+

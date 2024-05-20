@@ -1,56 +1,50 @@
 import { IDatabase } from "../db/common/IDatabase";
-import DBInstance from "../db";
-import { NetworkLayer } from "../networkLayer";
-import { UserRepository } from "../utils/users/UserRepository";
-import { TokenRepository } from "../utils/tokens/TokenRepository";
+import { NetworkLayer } from "../networkLayer/index";
+import { IUserRepository } from "../utils/users/IUserRepository";
+import { ITokenRepository } from "../utils/tokens/ITokenRepository";
+import { DefaultUserRepository } from "../utils/users/DefaultUserRepository";
+import { DefaultTokenRepository } from "../utils/tokens/DefaultTokenRepository";
 
 export class DependenciesInjection {
     private static dbInstance: IDatabase;
-    private static networkLayerInstance: NetworkLayer;
-    private static userRepository: UserRepository;
-    private static tokenRepository: TokenRepository;
+    private static networkLayer: NetworkLayer;
+    private static userRepository: IUserRepository;
+    private static tokenRepository: ITokenRepository;
+    private static isInit: boolean = false;
 
-    static async getDbInstance(): Promise<IDatabase> {
-        if(!DependenciesInjection.dbInstance) {
-            DependenciesInjection.dbInstance = DBInstance.getInstance();
-        }
+    public static async init(db: IDatabase): Promise<void> {
+        if(!DependenciesInjection.isInit) {
+            DependenciesInjection.dbInstance = db;
 
-        return  DependenciesInjection.dbInstance;
-    }
-    static async getNetworkLayerInstance(): Promise<NetworkLayer> {
-        if(!DependenciesInjection.networkLayerInstance) {
-            DependenciesInjection.networkLayerInstance = NetworkLayer.getInstance();
-            await DependenciesInjection.networkLayerInstance.init();
-        }
+            DependenciesInjection.networkLayer = NetworkLayer.getInstance();
+            await DependenciesInjection.networkLayer.init();
 
-        return  DependenciesInjection.networkLayerInstance;
-    }
-
-    static async getUserRepositoryInstance(): Promise<UserRepository> {
-        if(!DependenciesInjection.userRepository) {
-            //Initialize the database instance first.
-            await DependenciesInjection.getDbInstance();
-
-            DependenciesInjection.userRepository = UserRepository.getInstance();
-
-            DependenciesInjection.userRepository.init(
+            DependenciesInjection.userRepository = new DefaultUserRepository(
                 DependenciesInjection.dbInstance.users,
                 DependenciesInjection.dbInstance.tokens,
-                );
-        }
+            );
 
+            DependenciesInjection.tokenRepository = new DefaultTokenRepository(
+                DependenciesInjection.dbInstance.tokens
+            );
+
+            DependenciesInjection.isInit = true;
+        }
+    }
+
+    public static provideDb(): IDatabase {
+        return  DependenciesInjection.dbInstance;
+    }
+
+    public static provideNetworkLayer(): NetworkLayer {
+        return  DependenciesInjection.networkLayer;
+    }
+
+    public static provideUserRepository(): IUserRepository {
         return DependenciesInjection.userRepository;
     }
 
-    static async getTokenRepositoryInstance(): Promise<TokenRepository> {
-        if(!DependenciesInjection.tokenRepository) {
-            //Initialize the database instance first.
-            await DependenciesInjection.getDbInstance();
-
-            DependenciesInjection.tokenRepository = TokenRepository.getInstance();
-            DependenciesInjection.tokenRepository.init(DependenciesInjection.dbInstance.tokens);
-        }
-
+    public static provideTokenRepository(): ITokenRepository {
         return DependenciesInjection.tokenRepository;
     }
 }

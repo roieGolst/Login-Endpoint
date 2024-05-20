@@ -1,34 +1,32 @@
 import { Request, Response } from "express";
 import { DependenciesInjection } from "../di";
-import { UserAttributes } from "../db/entities/user/IUserEntity";
+import { NewUserPayload } from "../db/entities/user/IUserEntity";
+
+const userRepo = DependenciesInjection.provideUserRepository();
 
 export class AdminDashboardUseCases {
 
-    public static async dashboard(req: Request, res: Response): Promise<void> {
-        const usrRepo = await DependenciesInjection.getUserRepositoryInstance();
-        const userList = await usrRepo.getAllUsers();
+    public static async dashboard(_: Request, res: Response): Promise<void> {
+        const userList = await userRepo.getAllUsers();
 
         res.status(200).json(userList);
     }
 
     public static async getUserById(req: Request, res: Response): Promise<void> {
-        const usrRepo = await DependenciesInjection.getUserRepositoryInstance();
         const identifier = req.params.username;
 
-         res.status(200).send(await usrRepo.getUser(identifier));
+         res.status(200).send(await userRepo.getUserByIdentifier(identifier));
     }
     public static async getUserByEmail(req: Request, res: Response): Promise<void> {
-        const usrRepo = await DependenciesInjection.getUserRepositoryInstance();
         const identifier = req.params.email;
 
-         res.status(200).send(await usrRepo.getUser(identifier));
+         res.status(200).send(await userRepo.getUserByIdentifier(identifier));
     }
     public static async createUser(req: Request, res: Response): Promise<void> {
         try {
-            const usrRepo = await DependenciesInjection.getUserRepositoryInstance();
-            const body = req.body as UserAttributes;
+            const body = req.body as NewUserPayload;
 
-            const result = await usrRepo.register(body);
+            const result = await userRepo.register(body);
 
             if(!result) {
                 res.sendStatus(400);
@@ -43,10 +41,9 @@ export class AdminDashboardUseCases {
 
     public static async createAdmin(req: Request, res: Response): Promise<void> {
         try {
-            const usrRepo = await DependenciesInjection.getUserRepositoryInstance();
-            const body = req.body as UserAttributes;
+            const body = req.body as NewUserPayload;
 
-            const result = await usrRepo.registerAdminUser(body);
+            const result = await userRepo.registerAdminUser(body);
 
             if(!result) {
                 res.sendStatus(400);
@@ -61,10 +58,9 @@ export class AdminDashboardUseCases {
 
     public static async updateEmail(req: Request, res: Response): Promise<void> {
         try {
-            const usrRepo = await DependenciesInjection.getUserRepositoryInstance();
             const body = req.body;
 
-            const result = await usrRepo.updateEmail(body.username, body.requestedEmail);
+            const result = await userRepo.updateEmail(body.username, body.requestedEmail);
 
             if(!result) {
                 res.sendStatus(400);
@@ -79,10 +75,9 @@ export class AdminDashboardUseCases {
 
     public static async updatePassword(req: Request, res: Response): Promise<void> {
         try {
-            const usrRepo = await DependenciesInjection.getUserRepositoryInstance();
             const body = req.body;
 
-            const result = await usrRepo.updatePassword(body.identifire, body.newPassword);
+            const result = await userRepo.updatePassword(body.identifire, body.newPassword);
 
             if(!result) {
                 res.sendStatus(400);
@@ -97,10 +92,9 @@ export class AdminDashboardUseCases {
 
     public static async deleteUser(req: Request, res: Response): Promise<void> {
         try {
-            const usrRepo = await DependenciesInjection.getUserRepositoryInstance();
             const body = req.body;
 
-            const result = await usrRepo.deleteUser(body.id);
+            const result = await userRepo.deleteUser(body.id);
 
             if(!result) {
                 res.sendStatus(400);

@@ -2,7 +2,6 @@ import express, { Express } from "express";
 import * as fs from "fs";
 import { RouterAttributes } from "./routers/common/RouterAttributes";
 import { network } from "../configs";
-import userRote from "./routers/userRouter";
 
 export class NetworkLayer {
     private static INSTANCE: NetworkLayer;
@@ -10,7 +9,7 @@ export class NetworkLayer {
 
     private constructor() {
     }
-    public static getInstance(): NetworkLayer {
+    public  static getInstance(): NetworkLayer {
         if(!NetworkLayer.INSTANCE) {
             NetworkLayer.INSTANCE = new NetworkLayer();
         }
