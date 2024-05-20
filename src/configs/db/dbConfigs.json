@@ -6,7 +6,7 @@
 
   "auth": {
     "username": "root",
-    "password": ""
+    "password": "secr3t"
   },
 
   "database": "LoginEndpoint"

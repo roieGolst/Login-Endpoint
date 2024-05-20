@@ -14,7 +14,7 @@ export default class DbHelper {
             dbConfigs.auth.username,
             dbConfigs.auth.password
             ,{
-            host: "localhost",
+            host: dbConfigs.server.host,
             port: dbConfigs.server.port,
             dialect: "mysql"
         });

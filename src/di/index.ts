@@ -1,5 +1,5 @@
 import { IDatabase } from "../db/common/IDatabase";
-import { NetworkLayer } from "../networkLayer/index";
+import { NetworkLayer } from "../networkLayer";
 import { IUserRepository } from "../utils/users/IUserRepository";
 import { ITokenRepository } from "../utils/tokens/ITokenRepository";
 import { DefaultUserRepository } from "../utils/users/DefaultUserRepository";
@@ -10,14 +10,11 @@ export class DependenciesInjection {
     private static networkLayer: NetworkLayer;
     private static userRepository: IUserRepository;
     private static tokenRepository: ITokenRepository;
-    private static isInit: boolean = false;
+    private static isInit: boolean;
 
     public static async init(db: IDatabase): Promise<void> {
         if(!DependenciesInjection.isInit) {
             DependenciesInjection.dbInstance = db;
-
-            DependenciesInjection.networkLayer = NetworkLayer.getInstance();
-            await DependenciesInjection.networkLayer.init();
 
             DependenciesInjection.userRepository = new DefaultUserRepository(
                 DependenciesInjection.dbInstance.users,
@@ -27,6 +24,10 @@ export class DependenciesInjection {
             DependenciesInjection.tokenRepository = new DefaultTokenRepository(
                 DependenciesInjection.dbInstance.tokens
             );
+
+
+            DependenciesInjection.networkLayer = NetworkLayer.getInstance();
+            await DependenciesInjection.networkLayer.init();
 
             DependenciesInjection.isInit = true;
         }
